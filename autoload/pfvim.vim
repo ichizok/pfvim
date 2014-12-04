@@ -6,7 +6,7 @@ endfunction
 function! pfvim#read(uri)
   let uri = s:abs_uri(a:uri)
   enew
-  let ul_save = &undolevels
+  let ul_save = &l:undolevels
   try
     setl undolevels=-1
     exec '1read !pfexec cat 2>/dev/null "' . uri[3:] . '"'
