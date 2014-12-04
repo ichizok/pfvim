@@ -1,16 +1,16 @@
-function! s:get_fpath(url)
-  let path = (a:url == "<afile>") ? expand(a:url) : a:url
-  return path[0:2] ==# 'pf:' ? path[3:] : path
+function! s:abs_uri(uri)
+  let uri = a:uri == "<afile>" ? expand(a:uri) : a:uri
+  return uri[0:2] ==# 'pf:' ? uri : 'pf:' . uri
 endfunction
 
-function! pfvim#read(url)
-  0,$d
-  call setline(1, '...')		
-  exec '1read !pfexec cat 2>/dev/null "' . s:get_fpath(a:url) . '"'
-  exec 'silent' 'file' (a:url =~# '^pf:' ? a:url : 'pf:' . a:url)
+function! pfvim#read(uri)
+  let uri = s:abs_uri(a:uri)
+  enew
   let ul_save = &undolevels
   try
     setl undolevels=-1
+    exec '1read !pfexec cat 2>/dev/null "' . uri[3:] . '"'
+    exec 'silent' 'file' uri
     1d
   finally
     let &l:undolevels = ul_save
@@ -19,7 +19,7 @@ function! pfvim#read(url)
   filetype detect
 endfunction
 
-function! pfvim#write(url) abort
+function! pfvim#write(uri) abort
   setl nomod
-  exec 'silent' '%write !pfexec tee >/dev/null "' . s:get_fpath(a:url) . '"'
+  exec 'silent' '%write !pfexec tee >/dev/null "' . s:abs_uri(a:uri)[3:] . '"'
 endf
