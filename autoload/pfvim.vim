@@ -4,7 +4,7 @@ endif
 
 function! s:abs_uri(uri)
   let uri = a:uri == "<afile>" ? expand(a:uri) : a:uri
-  return uri[0:2] ==# 'pf:' ? uri : 'pf:' . uri
+  return escape(uri[0:2] ==# 'pf:' ? uri : 'pf:' . uri, ' ')
 endfunction
 
 function! s:read(uri)

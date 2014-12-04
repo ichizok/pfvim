@@ -28,9 +28,9 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=1 -complete=file PfEdit  call pfvim#edit(<q-args>)
-command! -nargs=1 -complete=file PfRead  call pfvim#read(<q-args>)
-command! -nargs=1 -complete=file PfWrite call pfvim#write(<q-args>)
+command! -nargs=1 -complete=file PfEdit  call pfvim#edit(<f-args>)
+command! -nargs=1 -complete=file PfRead  call pfvim#read(<f-args>)
+command! -nargs=1 -complete=file PfWrite call pfvim#write(<f-args>)
 
 call pfvim#autocmd()
 
