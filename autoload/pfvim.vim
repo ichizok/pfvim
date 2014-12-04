@@ -4,7 +4,7 @@ function! s:abs_uri(uri)
 endfunction
 
 function! s:read(uri)
-  exec 'silent' '1read !pfexec cat 2>/dev/null' a:uri[3:]
+  exec 'silent' 'read !pfexec cat 2>/dev/null' a:uri[3:]
 endfunction
 
 function! s:write(uri)
