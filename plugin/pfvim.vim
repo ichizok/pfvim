@@ -28,14 +28,11 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
+command! -nargs=1 -complete=file PfEdit  call pfvim#edit(<q-args>)
 command! -nargs=1 -complete=file PfRead  call pfvim#read(<q-args>)
 command! -nargs=1 -complete=file PfWrite call pfvim#write(<q-args>)
 
-augroup pfvim
-  autocmd!
-  au BufReadCmd,FileReadCmd   pf:*,pf:*/* PfRead <afile>
-  au BufWriteCmd,FileWriteCmd pf:*,pf:*/* PfWrite <afile>
-augroup END
+call pfvim#autocmd()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
