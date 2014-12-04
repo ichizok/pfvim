@@ -20,7 +20,8 @@ Usage
 
 Put it in the plugin directory, and
 
-command line: `$ vim pf:/etc/passwd`
+command line: `$ vim pf:/etc/hosts`
 
-  within vim: `:e pf:/etc/passwd`
+  within vim: `:e pf:/etc/hosts`
+          or: `:PfEdit /etc/hosts`
 
