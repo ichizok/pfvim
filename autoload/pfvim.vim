@@ -1,3 +1,7 @@
+if !exists('s:write_script')
+  let s:write_script = fnamemodify(expand('<sfile>'), ':p:r') . '.sh'
+endif
+
 function! s:abs_uri(uri)
   let uri = a:uri == "<afile>" ? expand(a:uri) : a:uri
   return uri[0:2] ==# 'pf:' ? uri : 'pf:' . uri
@@ -8,17 +12,8 @@ function! s:read(uri)
 endfunction
 
 function! s:write(uri)
-  let temp = tempname()
   let uri = a:uri[3:]
-  try
-    call writefile([], temp)
-    exec 'silent' '!pfexec chmod --reference=' . uri temp
-    exec 'silent' '!pfexec chown --reference=' . uri temp
-    exec 'silent' '%write !pfexec tee >/dev/null' temp
-    exec 'silent' '!pfexec mv' temp uri
-  finally
-    exec 'silent' '!pfexec rm -f' temp
-  endtry
+  exec 'silent' '%write !pfexec >/dev/null' s:write_script uri
 endfunction
 
 function! pfvim#edit(uri)
