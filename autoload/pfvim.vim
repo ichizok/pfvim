@@ -5,7 +5,6 @@ endfunction
 
 function! pfvim#read(uri)
   let uri = s:abs_uri(a:uri)
-  enew
   let ul_save = &l:undolevels
   try
     setl undolevels=-1
