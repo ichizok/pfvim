@@ -4,11 +4,21 @@ function! s:abs_uri(uri)
 endfunction
 
 function! s:read(uri)
-  exec '1read !pfexec cat 2>/dev/null "' . a:uri[3:] . '"'
+  exec 'silent' '1read !pfexec cat 2>/dev/null' a:uri[3:]
 endfunction
 
 function! s:write(uri)
-  exec 'silent' '%write !pfexec tee >/dev/null "' . a:uri[3:] . '"'
+  let temp = tempname()
+  let uri = a:uri[3:]
+  try
+    call writefile([], temp)
+    exec 'silent' '!pfexec chmod --reference=' . uri temp
+    exec 'silent' '!pfexec chown --reference=' . uri temp
+    exec 'silent' '%write !pfexec tee >/dev/null' temp
+    exec 'silent' '!pfexec mv' temp uri
+  finally
+    exec 'silent' '!pfexec rm -f' temp
+  endtry
 endfunction
 
 function! pfvim#edit(uri)
