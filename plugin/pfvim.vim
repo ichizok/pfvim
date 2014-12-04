@@ -28,28 +28,6 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:get_fpath(url)
-  let path = (a:url == "<afile>") ? expand(a:url) : a:url
-  if matchstr(path, '^pf\ze:') == 'pf'
-    let path = strpart(path, 3)
-  endif
-  return path
-endfunction
-
-function! pfvim#read(url)
-  :0,$d
-  call setline(1, '...')		
-  exec '1read !pfexec cat 2>/dev/null "'.s:get_fpath(a:url).'" '
-  :1d
-  setl nomod
-  :filetype detect
-endfunction
-
-function! pfvim#write(url) abort
-  setl nomod
-  exec '%write !pfexec tee >/dev/null "'.s:get_fpath(a:url).'"'
-endf
-
 command! -nargs=1 PfRead    call pfvim#read(<q-args>)
 command! -nargs=1 PfWrite   call pfvim#write(<q-args>)
 
