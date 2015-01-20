@@ -24,17 +24,25 @@
 if exists('g:loaded_pfvim')
   finish
 endif
+let g:loaded_pfvim = 1
 
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! -nargs=1 -complete=file PfEdit  call pfvim#edit(<f-args>)
-command! -nargs=1 -complete=file PfRead  call pfvim#read(<f-args>)
-command! -nargs=1 -complete=file PfWrite call pfvim#write(<f-args>)
+function s:PfEdit(path, bang)
+  silent execute 'edit' . a:bang 'pf:' . escape(a:path, ' \')
+endfunction
 
-call pfvim#autocmd()
+command! -nargs=1 -bang -complete=file PfEdit  call <SID>PfEdit('<args>', '<bang>')
+command! -nargs=1       -complete=file PfRead  call pfvim#read(<f-args>)
+command! -nargs=1       -complete=file PfWrite call pfvim#write(<f-args>)
+
+augroup pfvim
+  autocmd!
+  autocmd BufReadCmd               pf:*,pf:*/* call pfvim#edit('<afile>')
+  autocmd FileReadCmd              pf:*,pf:*/* call pfvim#read('<afile>')
+  autocmd BufWriteCmd,FileWriteCmd pf:*,pf:*/* call pfvim#write('<afile>')
+augroup END
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
-
-let g:loaded_pfvim = 1
