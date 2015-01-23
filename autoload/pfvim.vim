@@ -1,20 +1,20 @@
 if !exists('s:write_script')
-  let s:write_script = fnamemodify(expand('<sfile>'), ':p:r') . '.sh'
+  let s:write_script = fnameescape(fnamemodify(expand('<sfile>'), ':p:r') . '.sh')
 endif
 
 function! s:abs_uri(uri)
   let uri = a:uri ==# '<afile>' ? expand(a:uri) : a:uri
-  return fnamemodify(uri[0:2] ==# 'pf:' ? uri[3:] : uri, ':p')
+  return fnameescape(fnamemodify(uri[0:2] ==# 'pf:' ? uri[3:] : uri, ':p'))
 endfunction
 
 function! s:read(uri)
   let uri = s:abs_uri(a:uri)
-  silent execute printf('read !pfexec cat 2>/dev/null ''%s''', uri)
+  silent execute 'read !pfexec cat 2>/dev/null' uri
 endfunction
 
 function! s:write(uri) abort
   let uri = s:abs_uri(a:uri)
-  silent execute printf('%write !pfexec >/dev/null ''%s'' ''%s''', s:write_script, uri)
+  silent execute '%write !pfexec >/dev/null' s:write_script uri
   setl nomod
 endfunction
 
