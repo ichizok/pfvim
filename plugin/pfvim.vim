@@ -29,13 +29,10 @@ let g:loaded_pfvim = 1
 let s:save_cpo = &cpo
 set cpo&vim
 
-function s:PfEdit(path, bang)
-  silent execute 'edit' . a:bang 'pf:' . escape(a:path, ' \')
-endfunction
-
-command! -nargs=1 -bang -complete=file PfEdit  call <SID>PfEdit('<args>', '<bang>')
-command! -nargs=1       -complete=file PfRead  call pfvim#read(<f-args>)
-command! -nargs=1       -complete=file PfWrite call pfvim#write(<f-args>)
+command! -nargs=1 -bang -complete=file PfEdit
+      \ silent edit<bang> `='pf:' . fnamemodify(<q-args>, ':p')`
+command! -nargs=1 -complete=file PfRead  call pfvim#read(<q-args>)
+command! -nargs=1 -complete=file PfWrite call pfvim#write(<q-args>)
 
 augroup pfvim
   autocmd!
