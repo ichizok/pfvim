@@ -27,7 +27,7 @@ function! pfvim#edit(uri)
   finally
     let &l:undolevels = save_ul
   endtry
-  setl nomod
+  setl nobackup nomodified noswapfile noundofile
   filetype detect
 endfunction
 
